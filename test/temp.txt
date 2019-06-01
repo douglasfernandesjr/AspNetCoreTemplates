@@ -1,0 +1,1 @@
+Arquivos de testes para cobertura do código dos templates.
