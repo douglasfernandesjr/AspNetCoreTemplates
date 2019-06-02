@@ -9,11 +9,11 @@ using Xunit;
 
 namespace CleanArchTemplate.Tests.Infra
 {
-	public class RepositoryTests : IClassFixture<InMemoryTestFixture>
+	public class IRepositoryTests : IClassFixture<InMemoryTestFixture>
 	{
 		private readonly InMemoryTestFixture _fixture;
 
-		public RepositoryTests(InMemoryTestFixture fixture)
+		public IRepositoryTests(InMemoryTestFixture fixture)
 		{
 			_fixture = fixture;
 		}
@@ -30,17 +30,22 @@ namespace CleanArchTemplate.Tests.Infra
 
 		private EntidadeGenericaA GetById(int id)
 		{
-			using (var db = _fixture.NewContext())
+			using (var db = _fixture.Context())
 			{
 				return db.EntidadeGenericaA.Where(x => x.Id == id).FirstOrDefault();
 			}
+		}
+
+		private IRepository<EntidadeGenericaA> GetRepo()
+		{
+			return new Repository<EntidadeGenericaA>(_fixture.Context());
 		}
 
 		#region  Testes Manipulando 1 entidade
 		[Fact]
 		public void DeveCriarNovo()
 		{
-			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context());
+			var repo = GetRepo();
 
 			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
 
@@ -52,7 +57,7 @@ namespace CleanArchTemplate.Tests.Infra
 		[Fact]
 		public void DeveInserirAtualizarDeletarUM()
 		{
-			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context());
+			var repo = GetRepo();
 
 			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
 
@@ -83,7 +88,7 @@ namespace CleanArchTemplate.Tests.Infra
 		[Fact]
 		public void DeveInserirEDeletarUM()
 		{
-			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context());
+			var repo = GetRepo();
 
 			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
 
@@ -102,7 +107,7 @@ namespace CleanArchTemplate.Tests.Infra
 		[Fact]
 		public void NaoDeveDeletarInvalido()
 		{
-			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context());
+			var repo = GetRepo();
 
 			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
 			produto.Id = 12345;
@@ -125,7 +130,7 @@ namespace CleanArchTemplate.Tests.Infra
 		[Fact]
 		public void DeveCriarNovos()
 		{
-			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context());
+			var repo = GetRepo();
 
 			var produtos = new List<EntidadeGenericaA>();
 			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA));
@@ -135,7 +140,7 @@ namespace CleanArchTemplate.Tests.Infra
 
 			repo.Insert(produtos);
 
-			Assert.True(produtos[0].Id > 0) ;
+			Assert.True(produtos[0].Id > 0);
 			Assert.True(produtos[1].Id > 0);
 			Assert.True(produtos[2].Id > 0);
 			Assert.True(produtos[3].Id > 0);

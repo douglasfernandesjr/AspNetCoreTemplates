@@ -12,26 +12,25 @@ namespace CleanArchTemplate.Tests.Infra.EF.Mocks
 		public InMemoryTestFixture()
 		{
 			DataBaseName = Guid.NewGuid().ToString();
+			contexts = new List<TestDbContext>();
 		}
 
 		private string DataBaseName { get; set; }
 
-		private TestDbContext context;
+		private List<TestDbContext> contexts;
 
 		public TestDbContext Context() {
-			Dispose();
-			context = InMemoryContext(DataBaseName);
-			return context;
-		}
-
-		public TestDbContext NewContext()
-		{
-			return InMemoryContext(DataBaseName);
+			var db = InMemoryContext(DataBaseName);
+			contexts.Add(db);
+			return db;
 		}
 
 		public void Dispose()
 		{
-			context?.Dispose();
+			if (contexts != null) {
+				foreach (var context in contexts)
+					context?.Dispose();
+			}
 		}
 
 		private static TestDbContext InMemoryContext(string dbName)
