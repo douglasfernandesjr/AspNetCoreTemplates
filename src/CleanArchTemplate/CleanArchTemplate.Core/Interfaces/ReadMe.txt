@@ -1,0 +1,1 @@
+﻿Adicione aqui as interfaces padrões que as Classe Core são dependentes.

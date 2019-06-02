@@ -1,0 +1,2 @@
+﻿Adicione aqui todas as entidades responsáveis pela modelagem de dados, por padrão elas devem utilizar a interface IEntity.
+Como exemplo foi criada a classe abstrada EntityAuditBase, para ser usada como base para os demais campos.
