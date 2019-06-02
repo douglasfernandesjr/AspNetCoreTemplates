@@ -2,6 +2,7 @@ using CleanArchTemplate.Core.Interfaces;
 using CleanArchTemplate.Infrastructure.Repository.EF.Base;
 using CleanArchTemplate.Tests.Infra.EF.Mocks;
 using CleanArchTemplate.Tests.Infra.EF.Mocks.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Xunit;
 
@@ -20,10 +21,16 @@ namespace CleanArchTemplate.Tests.Infra
 		/// </summary>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		private EntidadeGenericaA GetById(EntidadeGenericaA model) {
+		private EntidadeGenericaA GetById(EntidadeGenericaA model)
+		{
+			return GetById(model.Id);
+		}
+
+		private EntidadeGenericaA GetById(int id)
+		{
 			using (var db = _fixture.NewContext())
 			{
-				return db.EntidadeGenericaA.Where(x => x.Id == model.Id).FirstOrDefault();
+				return db.EntidadeGenericaA.Where(x => x.Id == id).FirstOrDefault();
 			}
 		}
 
@@ -37,7 +44,7 @@ namespace CleanArchTemplate.Tests.Infra
 
 			repo.Insert(produto);
 
-			Assert.True(produto.Id > 0 );
+			Assert.True(produto.Id > 0);
 		}
 
 		[Fact]
@@ -51,7 +58,7 @@ namespace CleanArchTemplate.Tests.Infra
 
 			Assert.True(produto.Id > 0);
 
-			var produtoSelectInsert= GetById(produto);
+			var produtoSelectInsert = GetById(produto);
 			Assert.NotNull(produtoSelectInsert);
 
 			produto.Nome = MockValues.NomeGenericoB;
@@ -88,6 +95,27 @@ namespace CleanArchTemplate.Tests.Infra
 
 			var produtoSelectDelete = GetById(produto);
 
+			Assert.Null(produtoSelectDelete);
+
+		}
+
+		[Fact]
+		public void NaoDeveDeletarInvalido()
+		{
+			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context);
+
+			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
+			produto.Id = 12345;
+
+			Assert.Throws<DbUpdateConcurrencyException>(
+				() =>
+				{
+					repo.Delete(produto);
+				}
+			);
+			
+			repo.Delete(1234);
+			var produtoSelectDelete = GetById(1234);
 			Assert.Null(produtoSelectDelete);
 
 		}
