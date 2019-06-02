@@ -3,6 +3,7 @@ using CleanArchTemplate.Infrastructure.Repository.EF.Base;
 using CleanArchTemplate.Tests.Infra.EF.Mocks;
 using CleanArchTemplate.Tests.Infra.EF.Mocks.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -35,10 +36,11 @@ namespace CleanArchTemplate.Tests.Infra
 			}
 		}
 
+		#region  Testes Manipulando 1 entidade
 		[Fact]
 		public void DeveCriarNovo()
 		{
-			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context);
+			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context());
 
 			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
 
@@ -50,7 +52,7 @@ namespace CleanArchTemplate.Tests.Infra
 		[Fact]
 		public void DeveInserirAtualizarDeletarUM()
 		{
-			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context);
+			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context());
 
 			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
 
@@ -81,7 +83,7 @@ namespace CleanArchTemplate.Tests.Infra
 		[Fact]
 		public void DeveInserirEDeletarUM()
 		{
-			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context);
+			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context());
 
 			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
 
@@ -100,7 +102,7 @@ namespace CleanArchTemplate.Tests.Infra
 		[Fact]
 		public void NaoDeveDeletarInvalido()
 		{
-			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context);
+			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context());
 
 			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
 			produto.Id = 12345;
@@ -116,5 +118,28 @@ namespace CleanArchTemplate.Tests.Infra
 			var produtoSelectDelete = GetById(1234);
 			Assert.Null(produtoSelectDelete);
 		}
+
+		#endregion
+
+		#region  Testes Manipulando multiplas entidade
+		[Fact]
+		public void DeveCriarNovos()
+		{
+			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context());
+
+			var produtos = new List<EntidadeGenericaA>();
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA));
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoB));
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoB, MockValues.ValorGenericoA));
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoB, MockValues.ValorGenericoB));
+
+			repo.Insert(produtos);
+
+			Assert.True(produtos[0].Id > 0) ;
+			Assert.True(produtos[1].Id > 0);
+			Assert.True(produtos[2].Id > 0);
+			Assert.True(produtos[3].Id > 0);
+		}
+		#endregion
 	}
 }
