@@ -1,7 +1,7 @@
-﻿using CleanArchTemplate.Tests.Infra.EF.Entities;
+﻿using CleanArchTemplate.Tests.Infra.EF.Mocks.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchTemplate.Tests.Infra.EF
+namespace CleanArchTemplate.Tests.Infra.EF.Mocks
 {
 	public class TestDbContext : DbContext
 	{
@@ -9,7 +9,7 @@ namespace CleanArchTemplate.Tests.Infra.EF
 		{
 		}
 
-		public virtual DbSet<Produto> Produto { get; set; }
+		public virtual DbSet<EntidadeGenericaA> EntidadeGenericaA { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -17,14 +17,15 @@ namespace CleanArchTemplate.Tests.Infra.EF
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Produto>(entity =>
+			modelBuilder.Entity<EntidadeGenericaA>(entity =>
 			{
-				entity.ToTable("Produto");
+				entity.ToTable("EntidadeGenericaA");
 
 				entity.Property(e => e.Id);
 
 				entity.Property(e => e.Nome)
-					.HasColumnType("varchar(250)")
+					.HasMaxLength(250)
+					.IsUnicode(false)
 					.IsRequired();
 
 				entity.Property(e => e.Valor)

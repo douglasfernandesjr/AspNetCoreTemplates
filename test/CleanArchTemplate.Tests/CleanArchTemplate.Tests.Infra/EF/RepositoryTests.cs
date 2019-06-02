@@ -1,7 +1,8 @@
+using CleanArchTemplate.Core.Interfaces;
 using CleanArchTemplate.Infrastructure.Repository.EF.Base;
-using CleanArchTemplate.Tests.Infra.EF;
-using CleanArchTemplate.Tests.Infra.EF.Entities;
-using System;
+using CleanArchTemplate.Tests.Infra.EF.Mocks;
+using CleanArchTemplate.Tests.Infra.EF.Mocks.Entities;
+using System.Linq;
 using Xunit;
 
 namespace CleanArchTemplate.Tests.Infra
@@ -14,17 +15,61 @@ namespace CleanArchTemplate.Tests.Infra
 			_fixture = fixture;
 		}
 
+		/// <summary>
+		/// É um bug conhecido no In Memory Database, um novo context deve ser aberto para acessar os dados salvos inicialmente
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
+		private EntidadeGenericaA GetById(EntidadeGenericaA model) {
+			using (var db = _fixture.NewContext())
+			{
+				return db.EntidadeGenericaA.Where(x => x.Id == model.Id).FirstOrDefault();
+			}
+		}
+
 
 		[Fact]
 		public void DeveCriarNovo()
 		{
-			var repo = new Repository<Produto>(_fixture.Context);
+			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context);
 
-			var produto = new Produto() { Nome = "Produto", Valor = 123 };
+			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
 
 			repo.Insert(produto);
 
-			Assert.Equal(1, produto.Id);
+			Assert.True(produto.Id > 0 );
+		}
+
+		[Fact]
+		public void DeveInserirAtualizarDeletarUM()
+		{
+			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context);
+
+			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
+
+			repo.Insert(produto);
+
+			Assert.True(produto.Id > 0);
+
+			var produtoSelectInsert= GetById(produto);
+			Assert.NotNull(produtoSelectInsert);
+
+			produto.Nome = MockValues.NomeGenericoB;
+			produto.Valor = MockValues.ValorGenericoB;
+
+			repo.Update(produto);
+
+			var produtoSelectUpdate = GetById(produto);
+
+			Assert.Equal(produtoSelectUpdate.Nome, MockValues.NomeGenericoB);
+			Assert.Equal(produtoSelectUpdate.Valor, MockValues.ValorGenericoB);
+
+			repo.Delete(produto);
+
+			var produtoSelectDelete = GetById(produto);
+
+			Assert.Null(produtoSelectDelete);
+
 		}
 	}
 }

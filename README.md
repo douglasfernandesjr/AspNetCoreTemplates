@@ -4,3 +4,5 @@ A proposta destes templates é apresentar modelos de arquitetura em projetos sim
 
 
 **Em Desenvolvimento**
+
+DFJr.AspNetCore.Templates 
