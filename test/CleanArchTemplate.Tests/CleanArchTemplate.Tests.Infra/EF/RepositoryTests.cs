@@ -11,6 +11,7 @@ namespace CleanArchTemplate.Tests.Infra
 	public class RepositoryTests : IClassFixture<InMemoryTestFixture>
 	{
 		private readonly InMemoryTestFixture _fixture;
+
 		public RepositoryTests(InMemoryTestFixture fixture)
 		{
 			_fixture = fixture;
@@ -33,7 +34,6 @@ namespace CleanArchTemplate.Tests.Infra
 				return db.EntidadeGenericaA.Where(x => x.Id == id).FirstOrDefault();
 			}
 		}
-
 
 		[Fact]
 		public void DeveCriarNovo()
@@ -76,7 +76,6 @@ namespace CleanArchTemplate.Tests.Infra
 			var produtoSelectDelete = GetById(produto);
 
 			Assert.Null(produtoSelectDelete);
-
 		}
 
 		[Fact]
@@ -96,7 +95,6 @@ namespace CleanArchTemplate.Tests.Infra
 			var produtoSelectDelete = GetById(produto);
 
 			Assert.Null(produtoSelectDelete);
-
 		}
 
 		[Fact]
@@ -113,11 +111,10 @@ namespace CleanArchTemplate.Tests.Infra
 					repo.Delete(produto);
 				}
 			);
-			
+
 			repo.Delete(1234);
 			var produtoSelectDelete = GetById(1234);
 			Assert.Null(produtoSelectDelete);
-
 		}
 	}
 }
