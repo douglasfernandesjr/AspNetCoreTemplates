@@ -1,7 +1,6 @@
 ﻿using CleanArchTemplate.Core.Entities.Base;
 using CleanArchTemplate.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,56 +16,82 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 			_dbContext = db;
 		}
 
-		public void Insert(T model)
+		protected virtual void Set(T model, EntityState state)
+		{
+			if (state == EntityState.Modified)
+				_dbContext.Set<T>().Update(model);
+			else if (state == EntityState.Deleted)
+				_dbContext.Set<T>().Remove(model);
+			else
+				_dbContext.Set<T>().Add(model);
+		}
+
+		protected virtual void Set(IEnumerable<T> models, EntityState state)
+		{
+			if (state == EntityState.Modified)
+				_dbContext.Set<T>().UpdateRange(models);
+			else if (state == EntityState.Deleted)
+				_dbContext.Set<T>().RemoveRange(models);
+			else
+				_dbContext.Set<T>().AddRange(models);
+		}
+
+		protected virtual void SingleOperation(T model, EntityState state)
 		{
 			//Verifica se existe algum item
 			if (model == null)
 				return;
 
+			_dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+
 			//Define os valores padrões do item
-			_dbContext.Set<T>().Add(model);
-			_dbContext.Entry(model).State = EntityState.Added;
+			Set(model, state);
 
 			_dbContext.SaveChanges();
 		}
 
-		public void Insert(IEnumerable<T> models)
+		protected virtual void MultipleOperations(IEnumerable<T> models, EntityState state)
 		{
 			//Verifica se existe algum item
 			if (models == null || !models.Any())
 				return;
 
-			foreach
+			_dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+
+			Set(models, state);
+
+			_dbContext.SaveChanges();
 		}
 
-		public void Atualizar(T model)
+		public virtual void Insert(T model) => SingleOperation(model, EntityState.Added);
+
+		public virtual void Insert(IEnumerable<T> models) => MultipleOperations(models, EntityState.Added);
+
+		public virtual void Update(T model) => SingleOperation(model, EntityState.Modified);
+
+		public virtual void Update(IEnumerable<T> models) => MultipleOperations(models, EntityState.Modified);
+
+		public virtual void Delete(T model) => SingleOperation(model, EntityState.Deleted);
+
+		public virtual void Delete(IEnumerable<T> models) => MultipleOperations(models, EntityState.Deleted);
+
+		public virtual void Delete<TKeyProp>(TKeyProp key)
 		{
-			throw new NotImplementedException();
+			Delete(_dbContext.Set<T>().Find(key));
 		}
 
-		public void Atualizar(IEnumerable<T> models)
+		public virtual void Delete<TKeyProp>(IEnumerable<TKeyProp> keys)
 		{
-			throw new NotImplementedException();
-		}
+			var models = new List<T>();
 
-		public void Excluir(T model)
-		{
-			throw new NotImplementedException();
-		}
+			foreach (TKeyProp key in keys)
+			{
+				var tempModel = _dbContext.Set<T>().Find(key);
+				if (tempModel != null)
+					models.Add(_dbContext.Set<T>().Find(key));
+			}
 
-		public void Excluir(IEnumerable<T> models)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Excluir<TProp>(TProp key)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Excluir<TProp>(List<TProp> keys)
-		{
-			throw new NotImplementedException();
+			Delete(models);
 		}
 	}
 }
