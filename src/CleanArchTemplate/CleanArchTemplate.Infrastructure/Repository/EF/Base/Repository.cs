@@ -18,22 +18,35 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 
 		protected virtual void Set(T model, EntityState state)
 		{
-			if (state == EntityState.Modified)
+			if (state == EntityState.Added)
+				_dbContext.Set<T>().Add(model);
+			else if (state == EntityState.Modified)
 				_dbContext.Set<T>().Update(model);
 			else if (state == EntityState.Deleted)
 				_dbContext.Set<T>().Remove(model);
-			else
-				_dbContext.Set<T>().Add(model);
+
 		}
 
 		protected virtual void Set(IEnumerable<T> models, EntityState state)
 		{
-			if (state == EntityState.Modified)
-				_dbContext.Set<T>().UpdateRange(models);
+			if (state == EntityState.Added)
+				foreach (var model in models)
+				{
+					if (model != null)
+						_dbContext.Set<T>().Add(model);
+				}
+			else if (state == EntityState.Modified)
+				foreach (var model in models)
+				{
+					if (model != null)
+						_dbContext.Set<T>().Update(model);
+				}
 			else if (state == EntityState.Deleted)
-				_dbContext.Set<T>().RemoveRange(models);
-			else
-				_dbContext.Set<T>().AddRange(models);
+				foreach (var model in models)
+				{
+					if (model != null)
+						_dbContext.Set<T>().Remove(model);
+				}
 		}
 
 		protected virtual void SingleOperation(T model, EntityState state)

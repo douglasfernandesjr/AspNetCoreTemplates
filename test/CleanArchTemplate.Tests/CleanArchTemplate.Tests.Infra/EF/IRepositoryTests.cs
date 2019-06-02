@@ -41,7 +41,8 @@ namespace CleanArchTemplate.Tests.Infra
 			return new Repository<EntidadeGenericaA>(_fixture.Context());
 		}
 
-		#region  Testes Manipulando 1 entidade
+		#region Testes Manipulando 1 entidade
+
 		[Fact]
 		public void DeveCriarNovo()
 		{
@@ -124,9 +125,27 @@ namespace CleanArchTemplate.Tests.Infra
 			Assert.Null(produtoSelectDelete);
 		}
 
-		#endregion
+		[Fact]
+		public void DeveIgnorar()
+		{
+			var repo = GetRepo();
 
-		#region  Testes Manipulando multiplas entidade
+			EntidadeGenericaA produto = null;
+
+			repo.Insert(produto);
+			Assert.Null(produto);
+
+			repo.Update(produto);
+			Assert.Null(produto);
+
+			repo.Delete(produto);
+			Assert.Null(produto);
+		}
+
+		#endregion Testes Manipulando 1 entidade
+
+		#region Testes Manipulando multiplas entidade
+
 		[Fact]
 		public void DeveCriarNovos()
 		{
@@ -145,6 +164,26 @@ namespace CleanArchTemplate.Tests.Infra
 			Assert.True(produtos[2].Id > 0);
 			Assert.True(produtos[3].Id > 0);
 		}
-		#endregion
+
+		[Fact]
+		public void DeveCriarNovosIgnorarNulls()
+		{
+			var repo = GetRepo();
+
+			var produtos = new List<EntidadeGenericaA>();
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA));
+			produtos.Add(null);
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoB, MockValues.ValorGenericoA));
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoB, MockValues.ValorGenericoB));
+
+			repo.Insert(produtos);
+
+			Assert.True(produtos[0].Id > 0);
+			Assert.Null(produtos[1]);
+			Assert.True(produtos[2].Id > 0);
+			Assert.True(produtos[3].Id > 0);
+		}
 	}
+
+	#endregion Testes Manipulando multiplas entidade
 }
