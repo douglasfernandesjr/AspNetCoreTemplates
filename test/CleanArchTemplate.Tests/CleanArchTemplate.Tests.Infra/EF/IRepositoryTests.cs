@@ -98,7 +98,7 @@ namespace CleanArchTemplate.Tests.Infra
 			var produtoSelectInsert = GetById(produto);
 			Assert.NotNull(produtoSelectInsert);
 
-			repo.Delete(produtoSelectInsert.Id);
+			repo.DeleteById(produtoSelectInsert.Id);
 
 			var produtoSelectDelete = GetById(produto);
 
@@ -120,7 +120,7 @@ namespace CleanArchTemplate.Tests.Infra
 				}
 			);
 
-			repo.Delete(1234);
+			repo.DeleteById(1234);
 			var produtoSelectDelete = GetById(1234);
 			Assert.Null(produtoSelectDelete);
 		}
@@ -183,7 +183,76 @@ namespace CleanArchTemplate.Tests.Infra
 			Assert.True(produtos[2].Id > 0);
 			Assert.True(produtos[3].Id > 0);
 		}
+
+
+		[Fact]
+		public void DeveInserirAtualizarDeletarVarios()
+		{
+			var repo = GetRepo();
+
+			var produtos = new List<EntidadeGenericaA>();
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA));
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoB, MockValues.ValorGenericoB));
+
+			repo.Insert(produtos);
+
+			Assert.True(produtos[0].Id > 0);
+			Assert.True(produtos[1].Id > 0);
+
+			var produtoSelectInsert0 = GetById(produtos[0]);
+			var produtoSelectInsert1 = GetById(produtos[1]);
+			Assert.NotNull(produtoSelectInsert0);
+			Assert.NotNull(produtoSelectInsert1);
+
+			produtos[0].Nome = MockValues.NomeGenericoB;
+			produtos[0].Valor = MockValues.ValorGenericoB;
+
+			produtos[1].Nome = MockValues.NomeGenericoA;
+			produtos[1].Valor = MockValues.ValorGenericoA;
+
+			repo.Update(produtos);
+
+			var produtoSelectUpdate0 = GetById(produtos[0]);
+			var produtoSelectUpdate1 = GetById(produtos[1]);
+
+			Assert.Equal(produtoSelectUpdate0.Nome, MockValues.NomeGenericoB);
+			Assert.Equal(produtoSelectUpdate0.Valor, MockValues.ValorGenericoB);
+			Assert.Equal(produtoSelectUpdate1.Nome, MockValues.NomeGenericoA);
+			Assert.Equal(produtoSelectUpdate1.Valor, MockValues.ValorGenericoA);
+
+			repo.Delete(produtos);
+
+			var produtoSelectDelete0 = GetById(produtos[0]);
+			var produtoSelectDelete1 = GetById(produtos[1]);
+
+			Assert.Null(produtoSelectDelete0);
+			Assert.Null(produtoSelectDelete1);
+		}
+
+		[Fact]
+		public void DeveInserirEDeletarVarios()
+		{
+			var repo = GetRepo();
+
+			var produtos = new List<EntidadeGenericaA>();
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA));
+			produtos.Add(new EntidadeGenericaA(MockValues.NomeGenericoB, MockValues.ValorGenericoB));
+
+			repo.Insert(produtos);
+
+			var produtoSelectInsert0 = GetById(produtos[0]);
+			var produtoSelectInsert1 = GetById(produtos[1]);
+
+			repo.DeleteByIds(new int[] { produtoSelectInsert0.Id, produtoSelectInsert1.Id });
+
+			var produtoSelectDelete0 = GetById(produtos[0]);
+			var produtoSelectDelete1 = GetById(produtos[1]);
+
+			Assert.Null(produtoSelectDelete0);
+			Assert.Null(produtoSelectDelete1);
+		}
+		#endregion Testes Manipulando multiplas entidade
 	}
 
-	#endregion Testes Manipulando multiplas entidade
+
 }
