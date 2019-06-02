@@ -71,5 +71,25 @@ namespace CleanArchTemplate.Tests.Infra
 			Assert.Null(produtoSelectDelete);
 
 		}
+
+		[Fact]
+		public void DeveInserirEDeletarUM()
+		{
+			IRepository<EntidadeGenericaA> repo = new Repository<EntidadeGenericaA>(_fixture.Context);
+
+			var produto = new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA);
+
+			repo.Insert(produto);
+
+			var produtoSelectInsert = GetById(produto);
+			Assert.NotNull(produtoSelectInsert);
+
+			repo.Delete(produtoSelectInsert.Id);
+
+			var produtoSelectDelete = GetById(produto);
+
+			Assert.Null(produtoSelectDelete);
+
+		}
 	}
 }
