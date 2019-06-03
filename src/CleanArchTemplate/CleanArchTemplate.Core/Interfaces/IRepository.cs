@@ -21,8 +21,8 @@ namespace CleanArchTemplate.Core.Interfaces
 
 		void Delete(IEnumerable<T> models);
 
-		void DeleteById<TProp>(TProp key);
+		T FindById<TProp>(TProp key);
 
-		void DeleteByIds<TProp>(IEnumerable<TProp> keys);
+		IEnumerable<T> FindByIds<TProp>(IEnumerable<TProp> keys);
 	}
 }

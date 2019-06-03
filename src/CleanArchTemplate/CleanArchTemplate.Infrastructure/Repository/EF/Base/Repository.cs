@@ -88,12 +88,12 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 
 		public virtual void Delete(IEnumerable<T> models) => MultipleOperations(models, EntityState.Deleted);
 
-		public virtual void DeleteById<TKeyProp>(TKeyProp key)
+		public virtual T FindById<TKeyProp>(TKeyProp key)
 		{
-			Delete(_dbContext.Set<T>().Find(key));
+			return _dbContext.Set<T>().Find(key);
 		}
 
-		public virtual void DeleteByIds<TKeyProp>(IEnumerable<TKeyProp> keys)
+		public virtual IEnumerable<T> FindByIds<TKeyProp>(IEnumerable<TKeyProp> keys)
 		{
 			var models = new List<T>();
 
@@ -104,7 +104,7 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 					models.Add(_dbContext.Set<T>().Find(key));
 			}
 
-			Delete(models);
+			return models;
 		}
 	}
 }
