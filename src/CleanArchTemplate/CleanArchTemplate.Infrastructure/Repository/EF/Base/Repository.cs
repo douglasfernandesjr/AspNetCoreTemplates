@@ -97,11 +97,14 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 		{
 			var models = new List<T>();
 
-			foreach (TKeyProp key in keys)
+			if (keys != null && keys.Any())
 			{
-				var tempModel = _dbContext.Set<T>().Find(key);
-				if (tempModel != null)
-					models.Add(_dbContext.Set<T>().Find(key));
+				foreach (TKeyProp key in keys)
+				{
+					var tempModel = _dbContext.Set<T>().Find(key);
+					if (tempModel != null)
+						models.Add(tempModel);
+				}
 			}
 
 			return models;

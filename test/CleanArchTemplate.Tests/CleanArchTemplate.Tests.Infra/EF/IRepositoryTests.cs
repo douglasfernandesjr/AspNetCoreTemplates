@@ -240,9 +240,7 @@ namespace CleanArchTemplate.Tests.Infra
 
 			var lista = repo.FindByIds(new int[] { produtos[0].Id, produtos[2].Id, produtos[3].Id }).ToList();
 
-			Assert.Null(lista[0]);
-			Assert.Null(lista[1]);
-			Assert.Null(lista[2]);
+			Assert.Empty(lista);
 		}
 
 
@@ -304,8 +302,8 @@ namespace CleanArchTemplate.Tests.Infra
 			Assert.True(produtos[0].Id > 0);
 			Assert.True(produtos[1].Id > 0);
 
-			var produtoSelectInsert0 = repo.FindById(produtos[0]);
-			var produtoSelectInsert1 = repo.FindById(produtos[1]);
+			var produtoSelectInsert0 = repo.FindById(produtos[0].Id);
+			var produtoSelectInsert1 = repo.FindById(produtos[1].Id);
 			Assert.NotNull(produtoSelectInsert0);
 			Assert.NotNull(produtoSelectInsert1);
 
@@ -317,8 +315,8 @@ namespace CleanArchTemplate.Tests.Infra
 
 			repo.Update(produtos);
 
-			var produtoSelectUpdate0 = repo.FindById(produtos[0]);
-			var produtoSelectUpdate1 = repo.FindById(produtos[1]);
+			var produtoSelectUpdate0 = repo.FindById(produtos[0].Id);
+			var produtoSelectUpdate1 = repo.FindById(produtos[1].Id);
 
 			Assert.Equal(produtoSelectUpdate0.Nome, MockValues.NomeGenericoB);
 			Assert.Equal(produtoSelectUpdate0.Valor, MockValues.ValorGenericoB);
@@ -327,8 +325,8 @@ namespace CleanArchTemplate.Tests.Infra
 
 			repo.Delete(produtos);
 
-			var produtoSelectDelete0 = repo.FindById(produtos[0]);
-			var produtoSelectDelete1 = repo.FindById(produtos[1]);
+			var produtoSelectDelete0 = repo.FindById(produtos[0].Id);
+			var produtoSelectDelete1 = repo.FindById(produtos[1].Id);
 
 			Assert.Null(produtoSelectDelete0);
 			Assert.Null(produtoSelectDelete1);
@@ -349,7 +347,7 @@ namespace CleanArchTemplate.Tests.Infra
 
 			repo.Delete(new EntidadeGenericaA[] { produtoSelectInsert[0], produtoSelectInsert[1] });
 
-			var produtoSelectDelete0 = repo.FindById(produtos[0]);
+			var produtoSelectDelete0 = repo.FindById(produtos[0].Id);
 			var produtoSelectDelete1 = GetById(produtos[1]);
 
 			Assert.Null(produtoSelectDelete0);
