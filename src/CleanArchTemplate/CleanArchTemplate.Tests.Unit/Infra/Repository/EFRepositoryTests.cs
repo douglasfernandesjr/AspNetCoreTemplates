@@ -40,7 +40,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 
 		private IRepository<EntidadeGenericaA> GetRepo()
 		{
-			return new Repository<EntidadeGenericaA>(_fixture.Context());
+			return new EFRepository<EntidadeGenericaA>(_fixture.Context());
 		}
 
 		#region Testes Manipulando 1 entidade

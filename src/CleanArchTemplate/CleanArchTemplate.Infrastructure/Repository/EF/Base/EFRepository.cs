@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 {
-	public class Repository<T> : IRepository<T>
+	public class EFRepository<T> : IRepository<T>
 	where T : EntityBase, new()
 	{
 		private DbContext _dbContext;
 
-		public Repository(DbContext db)
+		public EFRepository(DbContext db)
 		{
 			_dbContext = db;
 		}
