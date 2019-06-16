@@ -10,6 +10,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config
 		}
 
 		public virtual DbSet<EntidadeGenericaA> EntidadeGenericaA { get; set; }
+		public virtual DbSet<EntidadeGenericaB> EntidadeGenericaB { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -30,6 +31,37 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config
 
 				entity.Property(e => e.Valor)
 				.IsRequired();
+			});
+
+			modelBuilder.Entity<EntidadeGenericaB>(entity =>
+			{
+				entity.ToTable("EntidadeGenericaB");
+
+				entity.Property(e => e.Id);
+
+				entity.Property(e => e.Nome)
+					.HasMaxLength(250)
+					.IsUnicode(false)
+					.IsRequired();
+
+				entity.Property(e => e.Valor)
+				.IsRequired();
+
+				entity.Property(e => e.DataHoraInclusao)
+				.IsRequired();
+
+				entity.Property(e => e.LoginInclusao)
+					.HasMaxLength(250)
+					.IsUnicode(false)
+					.IsRequired();
+
+				entity.Property(e => e.LoginAlteracao)
+					.HasMaxLength(250)
+					.IsUnicode(false);
+
+				entity.Property(e => e.DataHoraAlteracao);
+
+				entity.Property(e => e.Excluido).IsRequired();
 			});
 		}
 	}

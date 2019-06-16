@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Security.Claims;
+using System.Security.Principal;
 
 namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config
 {
@@ -11,5 +11,18 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config
 
 		public const double ValorGenericoA = 123;
 		public const double ValorGenericoB = 123456;
+
+		public const string MockUserName = "MockUser";
+		public const string MockUserId = "MockUser@email.com";
+		public const string MockUserAuthorityType = "TOKEN";
+
+		public static IPrincipal GetMockUser()
+		{
+			return new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+			{
+				new Claim(ClaimTypes.Name, MockUserName),
+				new Claim(ClaimTypes.NameIdentifier, MockUserId),
+			}, MockUserAuthorityType));
+		}
 	}
 }
