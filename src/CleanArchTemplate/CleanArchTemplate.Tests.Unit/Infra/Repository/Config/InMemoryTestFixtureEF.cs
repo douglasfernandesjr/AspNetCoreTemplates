@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config
 {
-	public class InMemoryTestFixture : IDisposable
+	public class InMemoryTestFixtureEF : IDisposable
 	{
 
-		public InMemoryTestFixture()
+		public InMemoryTestFixtureEF()
 		{
 			DataBaseName = Guid.NewGuid().ToString();
 			contexts = new List<TestDbContext>();

@@ -11,11 +11,11 @@ using Xunit;
 
 namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 {
-	public class EFRepositoryTests : IClassFixture<InMemoryTestFixture>
+	public class EFRepositoryTests : IClassFixture<InMemoryTestFixtureSQLLite>
 	{
-		private readonly InMemoryTestFixture _fixture;
+		private readonly InMemoryTestFixtureSQLLite _fixture;
 
-		public EFRepositoryTests(InMemoryTestFixture fixture)
+		public EFRepositoryTests(InMemoryTestFixtureSQLLite fixture)
 		{
 			_fixture = fixture;
 		}
