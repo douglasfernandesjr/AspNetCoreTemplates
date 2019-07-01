@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using CleanArchTemplate.Core.Interfaces.Data;
+using System.Collections.Generic;
 
-namespace CleanArchTemplate.Core.Interfaces
+namespace CleanArchTemplate.Core.Interfaces.DataAccess
 {
 	/// <summary>
 	/// 

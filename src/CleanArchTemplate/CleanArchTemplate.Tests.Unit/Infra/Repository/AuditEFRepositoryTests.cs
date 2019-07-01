@@ -1,4 +1,5 @@
 ﻿using CleanArchTemplate.Core.Interfaces;
+using CleanArchTemplate.Core.Interfaces.DataAccess;
 using CleanArchTemplate.Infrastructure.Repository.EF.Base;
 using CleanArchTemplate.Tests.Unit.Infra.Repository.Config;
 using CleanArchTemplate.Tests.Unit.Infra.Repository.Config.Entities;
@@ -19,9 +20,9 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture = fixture;
 		}
 
-		private IRepository<EntidadeGenericaB> GetRepo()
+		private EFAuditRepository<EntidadeGenericaB> GetRepo()
 		{
-			return new AuditEFRepository<EntidadeGenericaB>(MockValues.GetMockUser(), _fixture.Context());
+			return new EFAuditRepository<EntidadeGenericaB>(MockValues.GetMockUser(), _fixture.Context());
 		}
 
 		private EntidadeGenericaB GetById(EntidadeGenericaB model)

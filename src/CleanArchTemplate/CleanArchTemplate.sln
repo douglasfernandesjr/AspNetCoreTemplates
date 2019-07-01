@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0655FF01-FCB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DD50309A-94E9-4DCB-BA84-6A0ABBB3991A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchTemplate.Tests.Unit", "CleanArchTemplate.Tests.Unit\CleanArchTemplate.Tests.Unit.csproj", "{7D4BEF2D-BF00-465F-BBB5-6A943C76414E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchTemplate.Tests.Unit", "CleanArchTemplate.Tests.Unit\CleanArchTemplate.Tests.Unit.csproj", "{7D4BEF2D-BF00-465F-BBB5-6A943C76414E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

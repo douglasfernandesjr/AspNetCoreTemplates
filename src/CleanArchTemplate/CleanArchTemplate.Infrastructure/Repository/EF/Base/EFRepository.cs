@@ -1,12 +1,13 @@
 ﻿using CleanArchTemplate.Core.Entities.Base;
 using CleanArchTemplate.Core.Interfaces;
+using CleanArchTemplate.Core.Interfaces.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 {
-	public class EFRepository<T> : IRepository<T>
+	public class EFRepository<T> : IRepository<T>, IRepositorySearch<T>
 	where T : EntityBase, new()
 	{
 		private DbContext _dbContext;
@@ -108,6 +109,11 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 			}
 
 			return models;
+		}
+
+		public virtual ICustomSearchExecute<T> NewSearch()
+		{
+			return new EFSearchRepository<T>(this._dbContext);
 		}
 	}
 }

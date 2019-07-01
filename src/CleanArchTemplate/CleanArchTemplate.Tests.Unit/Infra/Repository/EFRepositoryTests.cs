@@ -38,7 +38,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			}
 		}
 
-		private IRepository<EntidadeGenericaA> GetRepo()
+		private EFRepository<EntidadeGenericaA> GetRepo()
 		{
 			return new EFRepository<EntidadeGenericaA>(_fixture.Context());
 		}

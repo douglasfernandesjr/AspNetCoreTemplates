@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CleanArchTemplate.Core.Interfaces
+namespace CleanArchTemplate.Core.Interfaces.Data
 {
 	public interface IEntityAudit : IEntity
 	{
