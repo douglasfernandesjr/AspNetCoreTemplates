@@ -9,7 +9,7 @@ using System.Text;
 
 namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 {
-	public class EFSearchRepository<T> : ICustomSearchExecute<T>
+	public class EFSearchRepository<T> : ICustomSearchExecuter<T>
 		where T : EntityBase, new()
 	{
 		private DbContext _dbContext;
