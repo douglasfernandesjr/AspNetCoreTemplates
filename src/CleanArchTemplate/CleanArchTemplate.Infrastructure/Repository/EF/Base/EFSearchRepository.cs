@@ -13,49 +13,80 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 	public class EFSearchRepository<T> : ICustomSearch<T>, ICustomSearchExecuter<T>
 		where T : EntityBase, new()
 	{
-		private DbContext _dbContext;
+		private readonly DbContext _dbContext;
+
+		private uint? _skip;
+		private uint? _take;
+
+		private List<string> _includesString;
+		private List<Expression<Func<T, IEntity>>> __includesExpression;
+		private List<Expression<Func<T, IEnumerable<IEntity>>>> _includesExpressionList;
+
+		private Expression<Func<T, bool>> _whereExpression;
+
+		private List<LambdaExpression> _orderByAscExpression;
+		private List<LambdaExpression> _orderByDescExpression;
+
+		
 
 		public EFSearchRepository(DbContext db)
 		{
 			_dbContext = db;
 		}
 
-		public ICustomSearchExecuter<T> All(Expression<Func<T, bool>> filterExpression)
-		{
-			throw new NotImplementedException();
-		}
+
 
 		public ICustomSearchExecuter<T> All()
 		{
-			throw new NotImplementedException();
+			return this;
 		}
 
-	
+		public ICustomSearchExecuter<T> Where(Expression<Func<T, bool>> filterExpression)
+		{
+			_whereExpression = filterExpression;
+			return this;
+		}
+
 
 		public ICustomSearchExecuter<T> IncludeEntity(string path)
 		{
-			throw new NotImplementedException();
+			if (_includesString == null)
+				_includesString = new List<string>();
+
+			_includesString.Add(path);
+
+			return this;
 		}
 
 		public ICustomSearchExecuter<T> IncludeEntity(Expression<Func<T, IEntity>> path)
 		{
-			throw new NotImplementedException();
+			if (__includesExpression == null)
+				__includesExpression = new List<Expression<Func<T, IEntity>>>();
+
+			__includesExpression.Add(path);
+
+			return this;
 		}
 
 
-		public ICustomSearchExecuter<T> Where(Expression<Func<T, bool>> filterExpression)
-		{
-			throw new NotImplementedException();
-		}
+		
 
 		ICustomSearchExecuter<T> ICustomSearchExecuter<T>.OrderByAsc<TProp>(Expression<Func<T, TProp>> orderByAsc)
 		{
-			throw new NotImplementedException();
+			if (_orderByAscExpression == null)
+				_orderByAscExpression = new List<LambdaExpression>();
+
+			_orderByAscExpression.Add(orderByAsc);
+			return this;
 		}
 
 		ICustomSearchExecuter<T> ICustomSearchExecuter<T>.OrderByDesc<TProp>(Expression<Func<T, TProp>> orderByDesc)
 		{
-			throw new NotImplementedException();
+			if (_orderByDescExpression == null)
+				_orderByDescExpression = new List<LambdaExpression>();
+
+			_orderByDescExpression.Add(orderByDesc);
+			return this;
 		}
 
 

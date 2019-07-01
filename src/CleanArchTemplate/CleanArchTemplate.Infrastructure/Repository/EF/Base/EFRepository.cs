@@ -10,7 +10,7 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 	public class EFRepository<T> : IRepository<T>, IRepositorySearch<T>
 	where T : EntityBase, new()
 	{
-		private DbContext _dbContext;
+		private readonly DbContext _dbContext;
 
 		public EFRepository(DbContext db)
 		{
