@@ -111,9 +111,11 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 			return models;
 		}
 
-		public virtual ICustomSearchExecute<T> NewSearch()
+		public virtual ICustomSearch<T> NewSearch()
 		{
 			return new EFSearchRepository<T>(this._dbContext);
 		}
+
+		
 	}
 }

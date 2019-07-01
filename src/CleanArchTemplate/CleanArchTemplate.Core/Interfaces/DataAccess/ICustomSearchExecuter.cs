@@ -1,5 +1,7 @@
 ﻿using CleanArchTemplate.Core.Interfaces.Data;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace CleanArchTemplate.Core.Interfaces.DataAccess
 {
@@ -10,6 +12,14 @@ namespace CleanArchTemplate.Core.Interfaces.DataAccess
 	public interface ICustomSearchExecuter<T> 
 		where T : IEntity
 	{
+		ICustomSearchExecuter<T> IncludeEntity(string path);
+
+		ICustomSearchExecuter<T> IncludeEntity(Expression<Func<T, IEntity>> path);
+
+		ICustomSearchExecuter<T> OrderByAsc<TProp>(Expression<Func<T, TProp>> orderByAsc);
+
+		ICustomSearchExecuter<T> OrderByDesc<TProp>(Expression<Func<T, TProp>> orderByDesc);
+
 		int ExecuteCount();
 
 		IEnumerable<T> ExecuteSearch();
@@ -21,6 +31,13 @@ namespace CleanArchTemplate.Core.Interfaces.DataAccess
 		/// <param name="pageSize">Starts in 1</param>
 		/// <returns></returns>
 		IPageEntity<T> ExecutePagedSearch(uint pageIndex, uint pageSize);
-		IPageEntity<T> ExecutePagedWithCount(uint pageIndex, uint pageSize);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="pageIndex">Starts in 0</param>
+		/// <param name="pageSize">Starts in 1</param>
+		/// <returns></returns>
+		IPageEntity<T> ExecutePagedSearchWithCount(uint pageIndex, uint pageSize);
 	}
 }
