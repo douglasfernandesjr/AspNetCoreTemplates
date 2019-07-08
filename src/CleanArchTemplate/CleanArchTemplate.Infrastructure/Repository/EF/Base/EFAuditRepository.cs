@@ -20,7 +20,7 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 			_currentPrincipal = principal;
 		}
 
-		private string currentUserName()
+		private string CurrentUserName()
 		{
 			return _currentPrincipal.Identity.Name;
 		}
@@ -40,12 +40,12 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 			{
 				if (state == EntityState.Added)
 				{
-					model.LoginInclusao = currentUserName();
+					model.LoginInclusao = CurrentUserName();
 					model.DataHoraInclusao = DateTime.Now;
 				}
 				else if (state == EntityState.Modified || state == EntityState.Deleted)
 				{
-					model.LoginAlteracao = currentUserName();
+					model.LoginAlteracao = CurrentUserName();
 					model.DataHoraAlteracao = DateTime.Now;
 
 					if (state == EntityState.Deleted)

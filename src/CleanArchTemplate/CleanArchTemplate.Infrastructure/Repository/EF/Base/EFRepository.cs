@@ -1,5 +1,4 @@
 ﻿using CleanArchTemplate.Core.Entities.Base;
-using CleanArchTemplate.Core.Interfaces;
 using CleanArchTemplate.Core.Interfaces.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
