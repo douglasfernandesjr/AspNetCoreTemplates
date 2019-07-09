@@ -17,17 +17,6 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.Clean();
 		}
 
-		private void PopulateA11B11()
-		{
-			var db = _fixture.Context();
-
-			for (int i = 0; i < 11; i++)
-			{
-				db.Add(new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA));
-				db.Add(new EntidadeGenericaA(MockValues.NomeGenericoB, MockValues.ValorGenericoB));
-			}
-			db.SaveChanges();
-		}
 
 		private EFRepository<EntidadeGenericaA> GetRepo()
 		{
@@ -43,7 +32,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		[Fact]
 		public async Task Given_PA11B11_When_ListAll_Then_ListAll()
 		{
-			PopulateA11B11();
+			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
 			var list = await repo.NewSearch().All().SearchAsync();
@@ -57,7 +46,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		[Fact]
 		public async Task Given_PA11B11_When_Count_Then_Return22()
 		{
-			PopulateA11B11();
+			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
 			int count = await repo.NewSearch().All().CountAsync();
@@ -68,7 +57,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		[Fact]
 		public async Task Given_PA11B11_When_WhereCount_Then_Return11()
 		{
-			PopulateA11B11();
+			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
 			int count = await repo.NewSearch().Where(x => x.Valor == MockValues.ValorGenericoB).CountAsync();
@@ -81,7 +70,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		[Fact]
 		public async Task Given_PA11B11_When_SmartPageSearch_0_10_Then_Page()
 		{
-			PopulateA11B11();
+			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
 			var page = await repo.NewSearch().All().SmartPagedSearchAsync(0,10);
@@ -99,7 +88,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		[Fact]
 		public async Task Given_PA11B11_When_SmartPageSearch_1_10_Then_Page()
 		{
-			PopulateA11B11();
+			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
 			var page = await repo.NewSearch().All().SmartPagedSearchAsync(1, 10);
@@ -117,7 +106,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		[Fact]
 		public async Task Given_PA11B11_When_SmartPageSearch_2_10_Then_Page()
 		{
-			PopulateA11B11();
+			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
 			var page = await repo.NewSearch().All().SmartPagedSearchAsync(2, 10);
@@ -137,7 +126,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		[Fact]
 		public async Task Given_PA11B11_When_PageSearchWithCount_0_10_Then_Page()
 		{
-			PopulateA11B11();
+			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
 			var page = await repo.NewSearch().All().PagedSearchAsync(0, 10);
@@ -155,7 +144,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		[Fact]
 		public async Task Given_PA11B11_When_PageSearchWithCount_1_10_Then_Page()
 		{
-			PopulateA11B11();
+			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
 			var page = await repo.NewSearch().All().PagedSearchAsync(1, 10);
@@ -173,7 +162,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		[Fact]
 		public async Task Given_PA11B11_When_PageSearchWithCount_2_10_Then_Page()
 		{
-			PopulateA11B11();
+			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
 			var page = await repo.NewSearch().All().PagedSearchAsync(2, 10);

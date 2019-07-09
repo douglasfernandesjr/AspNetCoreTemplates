@@ -18,6 +18,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		public AuditEFRepositoryTests(InMemoryTestFixtureSQLLite fixture)
 		{
 			_fixture = fixture;
+			_fixture.Clean();
 		}
 
 		private EFAuditRepository<EntidadeGenericaB> GetRepo()
@@ -38,8 +39,11 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			}
 		}
 
+		//http://www.anarsolutions.com/automated-unit-testing-tools-comparison/
+		//Given_Preconditions_When_StateUnderTest_Then_ExpectedBehavior
+		//When_Deposit_Is_Made_Should_Increase_Balance
 		[Fact]
-		public void DeveInserirUm()
+		public void When_Insert_Should_InsertWithLogData()
 		{
 			var repo = GetRepo();
 
@@ -50,6 +54,26 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			Assert.Equal(MockValues.MockUserName, produto.LoginInclusao);
 			Assert.True(produto.DataHoraInclusao != null);
 			Assert.False(produto.Excluido);
+		}
+
+
+		[Fact]
+		public void When_InsertList_Should_InsertWithLogData()
+		{
+			var repo = GetRepo();
+
+			var produtos = new List<EntidadeGenericaB>();
+			produtos.Add(new EntidadeGenericaB(MockValues.NomeGenericoA, MockValues.ValorGenericoA));
+			produtos.Add(new EntidadeGenericaB(MockValues.NomeGenericoA, MockValues.ValorGenericoB));
+
+			repo.Insert(produtos);
+
+			foreach (var produto in produtos)
+			{
+				Assert.Equal(MockValues.MockUserName, produto.LoginInclusao);
+				Assert.True(produto.DataHoraInclusao != null);
+				Assert.False(produto.Excluido);
+			}
 		}
 
 		[Fact]
@@ -84,24 +108,6 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			Assert.True(produtoSelectDelete.Excluido);
 		}
 
-		[Fact]
-		public void DeveInserirVarios()
-		{
-			var repo = GetRepo();
-
-			var produtos = new List<EntidadeGenericaB>();
-			produtos.Add(new EntidadeGenericaB(MockValues.NomeGenericoA, MockValues.ValorGenericoA));
-			produtos.Add(new EntidadeGenericaB(MockValues.NomeGenericoA, MockValues.ValorGenericoB));
-
-			repo.Insert(produtos);
-
-			foreach (var produto in produtos)
-			{
-				Assert.Equal(MockValues.MockUserName, produto.LoginInclusao);
-				Assert.True(produto.DataHoraInclusao != null);
-				Assert.False(produto.Excluido);
-			}
-		}
 
 		[Fact]
 		public void DeveInserirAtualizarDeletarVarios()

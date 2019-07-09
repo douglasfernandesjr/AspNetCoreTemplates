@@ -43,6 +43,8 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			return new EFRepository<EntidadeGenericaA>(_fixture.Context());
 		}
 
+		//TODO refatorar
+
 		#region Testes Manipulando 1 entidade
 
 		[Fact]
