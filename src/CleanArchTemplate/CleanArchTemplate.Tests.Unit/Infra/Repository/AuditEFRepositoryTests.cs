@@ -76,6 +76,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			}
 		}
 
+		//TODO separar
 		[Fact]
 		public void DeveInserirAtualizarDeletarUm()
 		{
