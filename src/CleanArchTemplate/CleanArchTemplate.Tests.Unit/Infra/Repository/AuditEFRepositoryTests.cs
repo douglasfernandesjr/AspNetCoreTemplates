@@ -75,7 +75,47 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 				Assert.False(produto.Excluido);
 			}
 		}
+		[Fact]
+		public void When_Update_Should_UpdateWithLogData()
+		{
+			int i = _fixture.PopulateB1();
+			var repo = GetRepo();
 
+			var produto = GetById(i);
+
+			produto.Nome = MockValues.NomeGenericoB;
+			produto.Valor = MockValues.ValorGenericoB;
+
+			repo.Update(produto);
+
+			var produtoSelectUpdate = GetById(produto);
+
+			Assert.Equal(MockValues.MockUserName, produtoSelectUpdate.LoginAlteracao);
+			Assert.NotNull(produtoSelectUpdate.DataHoraAlteracao);
+			Assert.False(produtoSelectUpdate.Excluido);
+
+
+		}
+
+		[Fact]
+		public void When_Delete_Should_DeleteWithLogData()
+		{
+			int i = _fixture.PopulateB1();
+			var repo = GetRepo();
+
+			var produto = GetById(i);
+
+			produto.Nome = MockValues.NomeGenericoB;
+			produto.Valor = MockValues.ValorGenericoB;
+
+			repo.Delete(produto);
+
+			var produtoSelectDelete = GetById(produto);
+
+			Assert.Equal(MockValues.MockUserName, produtoSelectDelete.LoginAlteracao);
+			Assert.NotNull(produtoSelectDelete.DataHoraAlteracao);
+			Assert.True(produtoSelectDelete.Excluido);
+		}
 		//TODO separar
 		[Fact]
 		public void DeveInserirAtualizarDeletarUm()

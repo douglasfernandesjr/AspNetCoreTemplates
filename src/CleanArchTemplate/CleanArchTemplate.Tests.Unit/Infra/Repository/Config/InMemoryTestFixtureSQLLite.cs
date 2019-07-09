@@ -17,9 +17,11 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config
 			return new DbContextOptionsBuilder<TestDbContext>()
 				.UseSqlite(_connection).Options;
 		}
-		public void Clean() {
+		public void Clean()
+		{
 
-			if (_connection != null) {
+			if (_connection != null)
+			{
 				_connection.Dispose();
 				_connection = null;
 			}
@@ -90,6 +92,20 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config
 			db.SaveChanges();
 		}
 
+		public int PopulateB1()
+		{
+			var db = Context();
+			var b = new EntidadeGenericaB(MockValues.NomeGenericoB, MockValues.ValorGenericoB);
+			b.Excluido = false;
+			b.DataHoraInclusao = DateTime.Now;
+			b.DataHoraAlteracao = null;
+			b.LoginAlteracao = null;
+			b.LoginInclusao = "UsuarioInclusao";
+			db.Add(b);
+			db.SaveChanges();
+
+			return b.Id;
+		}
 		#endregion
 	}
 }
