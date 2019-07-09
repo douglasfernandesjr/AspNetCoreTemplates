@@ -20,6 +20,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture = fixture;
 
 			Populate();
+			//Executa antes de cada teste, limpar o banco aqui.
 		}
 
 	
