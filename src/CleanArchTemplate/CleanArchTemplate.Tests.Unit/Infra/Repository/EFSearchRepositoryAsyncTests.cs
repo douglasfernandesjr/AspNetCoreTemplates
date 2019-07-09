@@ -2,20 +2,19 @@
 using CleanArchTemplate.Tests.Unit.Infra.Repository.Config;
 using CleanArchTemplate.Tests.Unit.Infra.Repository.Config.Entities;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 {
-	public class EFSearchRepositoryTests : IClassFixture<InMemoryTestFixtureSQLLite>
+	public class EFSearchRepositoryAsyncTests : IClassFixture<InMemoryTestFixtureSQLLite>
 	{
 		private readonly InMemoryTestFixtureSQLLite _fixture;
 
-		public EFSearchRepositoryTests(InMemoryTestFixtureSQLLite fixture)
+		public EFSearchRepositoryAsyncTests(InMemoryTestFixtureSQLLite fixture)
 		{
 			_fixture = fixture;
-
 			_fixture.Clean();
-			//Executa antes de cada teste, limpar o banco aqui.
 		}
 
 		private void PopulateA11B11()
@@ -42,75 +41,37 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 
 		#region ExecuteSearch
 		[Fact]
-		public void Given_PA11B11_When_ListAll_Then_ListAll()
+		public async Task Given_PA11B11_When_ListAll_Then_ListAll()
 		{
 			PopulateA11B11();
 			var repo = GetRepo();
 
-			var list = repo.NewSearch().All().Search();
+			var list = await repo.NewSearch().All().SearchAsync();
 
 			Assert.Equal(22, list.Count());
 		}
 
-		[Fact]
-		public void Given_PA11B11_When_FilterByname_Then_FilterByname()
-		{
-			PopulateA11B11();
-			var repo = GetRepo();
-
-			var list = repo.NewSearch().Where(x => x.Nome == MockValues.NomeGenericoB).Search();
-
-			Assert.Equal(11, list.Count());
-		}
-
-		[Fact]
-		public void Given_PA11B11_When_ListAllOrderByAsc_Then_ListAllOrderByAsc()
-		{
-			PopulateA11B11();
-			var repo = GetRepo();
-
-			var list = repo.NewSearch().All().OrderByAsc(x => x.Nome).Search();
-
-			Assert.Equal(22, list.Count());
-			Assert.Equal(list.ElementAt(0).Nome, MockValues.NomeGenericoB);
-			Assert.Equal(list.ElementAt(10).Nome, MockValues.NomeGenericoB);
-			Assert.Equal(list.ElementAt(11).Nome, MockValues.NomeGenericoA);
-		}
-
-		[Fact]
-		public void Given_PA11B11_When_ListAllOrderByDesc_Then_ListAllOrderByDesc()
-		{
-			PopulateA11B11();
-			var repo = GetRepo();
-
-			var list = repo.NewSearch().All().OrderByDesc(x => x.Nome).Search();
-
-			Assert.Equal(22, list.Count());
-			Assert.Equal(list.ElementAt(0).Nome, MockValues.NomeGenericoA);
-			Assert.Equal(list.ElementAt(10).Nome, MockValues.NomeGenericoA);
-			Assert.Equal(list.ElementAt(11).Nome, MockValues.NomeGenericoB);
-		}
 		#endregion ExecuteSearch
 
 		#region Count
 		[Fact]
-		public void Given_PA11B11_When_Count_Then_Return22()
+		public async Task Given_PA11B11_When_Count_Then_Return22()
 		{
 			PopulateA11B11();
 			var repo = GetRepo();
 
-			int count = repo.NewSearch().All().Count();
+			int count = await repo.NewSearch().All().CountAsync();
 
 			Assert.Equal(22, count);
 		}
 
 		[Fact]
-		public void Given_PA11B11_When_WhereCount_Then_Return11()
+		public async Task Given_PA11B11_When_WhereCount_Then_Return11()
 		{
 			PopulateA11B11();
 			var repo = GetRepo();
 
-			int count = repo.NewSearch().Where(x => x.Valor == MockValues.ValorGenericoB).Count();
+			int count = await repo.NewSearch().Where(x => x.Valor == MockValues.ValorGenericoB).CountAsync();
 
 			Assert.Equal(11, count);
 		}
@@ -118,12 +79,12 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 
 		#region SmartPageSearch
 		[Fact]
-		public void Given_PA11B11_When_SmartPageSearch_0_10_Then_Page()
+		public async Task Given_PA11B11_When_SmartPageSearch_0_10_Then_Page()
 		{
 			PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = repo.NewSearch().All().SmartPagedSearch(0,10);
+			var page = await repo.NewSearch().All().SmartPagedSearchAsync(0,10);
 
 			Assert.NotNull(page);
 			Assert.Equal(0, page.PageIndex);
@@ -136,12 +97,12 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		}
 
 		[Fact]
-		public void Given_PA11B11_When_SmartPageSearch_1_10_Then_Page()
+		public async Task Given_PA11B11_When_SmartPageSearch_1_10_Then_Page()
 		{
 			PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = repo.NewSearch().All().SmartPagedSearch(1, 10);
+			var page = await repo.NewSearch().All().SmartPagedSearchAsync(1, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(1, page.PageIndex);
@@ -154,12 +115,12 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		}
 
 		[Fact]
-		public void Given_PA11B11_When_SmartPageSearch_2_10_Then_Page()
+		public async Task Given_PA11B11_When_SmartPageSearch_2_10_Then_Page()
 		{
 			PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = repo.NewSearch().All().SmartPagedSearch(2, 10);
+			var page = await repo.NewSearch().All().SmartPagedSearchAsync(2, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(2, page.PageIndex);
@@ -174,12 +135,12 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 
 		#region PageSearchWithCount
 		[Fact]
-		public void Given_PA11B11_When_PageSearchWithCount_0_10_Then_Page()
+		public async Task Given_PA11B11_When_PageSearchWithCount_0_10_Then_Page()
 		{
 			PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = repo.NewSearch().All().PagedSearch(0, 10);
+			var page = await repo.NewSearch().All().PagedSearchAsync(0, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(0, page.PageIndex);
@@ -192,12 +153,12 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		}
 
 		[Fact]
-		public void Given_PA11B11_When_PageSearchWithCount_1_10_Then_Page()
+		public async Task Given_PA11B11_When_PageSearchWithCount_1_10_Then_Page()
 		{
 			PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = repo.NewSearch().All().PagedSearch(1, 10);
+			var page = await repo.NewSearch().All().PagedSearchAsync(1, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(1, page.PageIndex);
@@ -210,12 +171,12 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 		}
 
 		[Fact]
-		public void Given_PA11B11_When_PageSearchWithCount_2_10_Then_Page()
+		public async Task Given_PA11B11_When_PageSearchWithCount_2_10_Then_Page()
 		{
 			PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = repo.NewSearch().All().PagedSearch(2, 10);
+			var page = await repo.NewSearch().All().PagedSearchAsync(2, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(2, page.PageIndex);

@@ -16,6 +16,13 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config
 			return new DbContextOptionsBuilder<TestDbContext>()
 				.UseSqlite(_connection).Options;
 		}
+		public void Clean() {
+
+			if (_connection != null) {
+				_connection.Dispose();
+				_connection = null;
+			}
+		}
 
 		public TestDbContext Context()
 		{

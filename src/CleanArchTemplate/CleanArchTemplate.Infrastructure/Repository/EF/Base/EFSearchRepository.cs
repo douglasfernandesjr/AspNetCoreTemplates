@@ -79,21 +79,21 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 
 		#region Execute
 
-		public int ExecuteCount() => CountQuery().Count();
+		public int Count() => CountQuery().Count();
 
-		public async Task<int> ExecuteCountAsync() => await CountQuery().CountAsync();
+		public async Task<int> CountAsync() => await CountQuery().CountAsync();
 
-		public IEnumerable<T> ExecuteSearch() => SearchQuery().ToList();
+		public IEnumerable<T> Search() => SearchQuery().ToList();
 
-		public async Task<IEnumerable<T>> ExecuteSearchAsync() => await SearchQuery().ToListAsync();
+		public async Task<IEnumerable<T>> SearchAsync() => await SearchQuery().ToListAsync();
 
-		public IPageEntity<T> ExecutePagedSearch(int pageIndex, int pageSize)
+		public IPageEntity<T> SmartPagedSearch(int pageIndex, int pageSize)
 			=> PageEntity(pageIndex, pageSize, SmartSearchQuery(pageIndex, pageSize).ToList());
 
-		public async Task<IPageEntity<T>> ExecutePagedSearchAsync(int pageIndex, int pageSize)
+		public async Task<IPageEntity<T>> SmartPagedSearchAsync(int pageIndex, int pageSize)
 			=> PageEntity(pageIndex, pageSize, await SmartSearchQuery(pageIndex, pageSize).ToListAsync());
 
-		public IPageEntity<T> ExecutePagedSearchWithCount(int pageIndex, int pageSize)
+		public IPageEntity<T> PagedSearch(int pageIndex, int pageSize)
 		{
 			int count = CountQuery().Count();
 			var result = SearchQuery(pageIndex, pageSize).ToList();
@@ -101,7 +101,7 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 			return PageEntity(pageIndex, pageSize, result, count);
 		}
 
-		public async Task<IPageEntity<T>> ExecutePagedSearchWithCountAsync(int pageIndex, int pageSize)
+		public async Task<IPageEntity<T>> PagedSearchAsync(int pageIndex, int pageSize)
 		{
 			int count = await CountQuery().CountAsync();
 
@@ -193,27 +193,28 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 		#endregion configs
 
 		#region queries
-
-		public IQueryable<T> CountQuery()
-		{
-			var query = _dbContext.Set<T>().AsQueryable();
-			return FilterConfig(query);
+		private IQueryable<T> Query() {
+			return _dbContext.Set<T>().AsQueryable();
 		}
 
-		public IQueryable<T> SearchQuery()
+		private IQueryable<T> CountQuery()
 		{
-			var query = _dbContext.Set<T>().AsQueryable();
-			return OrderByConfig(FilterConfig(IncludesConfig(query)));
+			return FilterConfig(Query());
 		}
 
-		public IQueryable<T> SmartSearchQuery(int pageIndex, int pageSize)
+		private IQueryable<T> SearchQuery()
+		{
+			return OrderByConfig(FilterConfig(IncludesConfig(Query())));
+		}
+
+		private IQueryable<T> SmartSearchQuery(int pageIndex, int pageSize)
 		{
 			return SearchQuery().Skip(pageIndex * pageSize).Take(pageSize + 1);
 		}
 
-		public IQueryable<T> SearchQuery(int pageIndex, int pageSize)
+		private IQueryable<T> SearchQuery(int pageIndex, int pageSize)
 		{
-			return SearchQuery().Skip(pageIndex * pageSize).Take(pageSize + 1);
+			return SearchQuery().Skip(pageIndex * pageSize).Take(pageSize);
 		}
 
 		#endregion queries

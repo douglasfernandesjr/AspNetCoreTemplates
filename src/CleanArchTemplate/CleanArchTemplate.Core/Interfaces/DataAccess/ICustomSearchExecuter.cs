@@ -21,44 +21,44 @@ namespace CleanArchTemplate.Core.Interfaces.DataAccess
 
 		ICustomSearchExecuter<T> OrderByDesc<TProp>(Expression<Func<T, TProp>> orderByDesc);
 
-		int ExecuteCount();
+		int Count();
 
-		IEnumerable<T> ExecuteSearch();
+		IEnumerable<T> Search();
 
 		/// <summary>
-		///
+		/// Execute without count
 		/// </summary>
 		/// <param name="pageIndex">Starts in 0</param>
 		/// <param name="pageSize">Starts in 1</param>
 		/// <returns></returns>
-		IPageEntity<T> ExecutePagedSearch(int pageIndex, int pageSize);
+		IPageEntity<T> SmartPagedSearch(int pageIndex, int pageSize);
 
 		/// <summary>
-		///
+		/// Execute sith count
 		/// </summary>
 		/// <param name="pageIndex">Starts in 0</param>
 		/// <param name="pageSize">Starts in 1</param>
 		/// <returns></returns>
-		IPageEntity<T> ExecutePagedSearchWithCount(int pageIndex, int pageSize);
+		IPageEntity<T> PagedSearch(int pageIndex, int pageSize);
 
-		Task<int> ExecuteCountAsync();
+		Task<int> CountAsync();
 
-		Task<IEnumerable<T>> ExecuteSearchAsync();
+		Task<IEnumerable<T>> SearchAsync();
 
 		/// <summary>
-		///
+		/// Execute without count
 		/// </summary>
 		/// <param name="pageIndex">Starts in 0</param>
 		/// <param name="pageSize">Starts in 1</param>
 		/// <returns></returns>
-		Task<IPageEntity<T>> ExecutePagedSearchAsync(int pageIndex, int pageSize);
+		Task<IPageEntity<T>> SmartPagedSearchAsync(int pageIndex, int pageSize);
 
 		/// <summary>
-		///
+		/// Execute sith count
 		/// </summary>
 		/// <param name="pageIndex">Starts in 0</param>
 		/// <param name="pageSize">Starts in 1</param>
 		/// <returns></returns>
-		Task<IPageEntity<T>> ExecutePagedSearchWithCountAsync(int pageIndex, int pageSize);
+		Task<IPageEntity<T>> PagedSearchAsync(int pageIndex, int pageSize);
 	}
 }
