@@ -11,6 +11,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config
 
 		public virtual DbSet<EntidadeGenericaA> EntidadeGenericaA { get; set; }
 		public virtual DbSet<EntidadeGenericaB> EntidadeGenericaB { get; set; }
+		public virtual DbSet<EntidadeGenericaC> EntidadeGenericaC { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -62,6 +63,23 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config
 				entity.Property(e => e.DataHoraAlteracao);
 
 				entity.Property(e => e.Excluido).IsRequired();
+			});
+
+			modelBuilder.Entity<EntidadeGenericaC>(entity =>
+			{
+				entity.Property(e => e.Id);
+
+				entity.Property(e => e.Nome)
+					.HasMaxLength(250)
+					.IsUnicode(false)
+					.IsRequired();
+
+				entity.Property(e => e.Valor);
+
+				entity.HasOne(x => x.EntidadeA)
+				.WithMany()
+				.HasForeignKey(x => x.EntidadeAId)
+				.OnDelete(DeleteBehavior.Restrict);
 			});
 		}
 	}

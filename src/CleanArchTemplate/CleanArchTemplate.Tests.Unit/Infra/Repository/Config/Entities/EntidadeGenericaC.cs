@@ -2,13 +2,13 @@
 
 namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config.Entities
 {
-	public class EntidadeGenericaA : EntityBase
+	public class EntidadeGenericaC : EntityBase
 	{
-		public EntidadeGenericaA()
+		public EntidadeGenericaC()
 		{
 		}
 
-		public EntidadeGenericaA(string nome, double valor)
+		public EntidadeGenericaC(string nome, double valor)
 		{
 			Nome = nome;
 			Valor = valor;
@@ -19,5 +19,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config.Entities
 		public string Nome { get; set; }
 
 		public double Valor { get; set; }
+		public int EntidadeAId { get; set; }
+		public virtual EntidadeGenericaA EntidadeA { get; set; }
 	}
 }

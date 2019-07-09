@@ -1,6 +1,7 @@
 ﻿using CleanArchTemplate.Infrastructure.Repository.EF.Base;
 using CleanArchTemplate.Tests.Unit.Infra.Repository.Config;
 using CleanArchTemplate.Tests.Unit.Infra.Repository.Config.Entities;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -30,17 +31,69 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			db.SaveChanges();
 		}
 
+		private void PopulateA11B11C11()
+		{
+			var db = _fixture.Context();
+
+			var lA = new List<EntidadeGenericaA>();
+
+			for (int i = 0; i < 11; i++)
+			{
+				lA.Add(new EntidadeGenericaA(MockValues.NomeGenericoA, MockValues.ValorGenericoA));
+				db.Add(lA[i]);
+				db.Add(new EntidadeGenericaA(MockValues.NomeGenericoB, MockValues.ValorGenericoB));
+			}
+			db.SaveChanges();
+
+			for (int i = 0; i < 11; i++)
+			{
+				var c = new EntidadeGenericaC(MockValues.NomeGenericoA, MockValues.ValorGenericoA)
+				{
+					EntidadeAId = lA[0].Id
+				};
+				db.Add(c);
+			}
+			db.SaveChanges();
+		}
+
 		private EFRepository<EntidadeGenericaA> GetRepo()
 		{
 			return new EFRepository<EntidadeGenericaA>(_fixture.Context());
 		}
 
+		private EFRepository<EntidadeGenericaC> GetRepoC()
+		{
+			return new EFRepository<EntidadeGenericaC>(_fixture.Context());
+		}
+
 		//http://www.anarsolutions.com/automated-unit-testing-tools-comparison/
 		//Given_Preconditions_When_StateUnderTest_Then_ExpectedBehavior
 		//When_Deposit_Is_Made_Should_Increase_Balance
+		#region Entity
+		[Fact]
+		public void Given_PA11B11C11_When_NotAddEntityCListAll_Then_ListAll()
+		{
+			PopulateA11B11C11();
 
+			var list = GetRepoC().NewSearch().All().Search();
+
+			Assert.Equal(11, list.Count());
+			Assert.Null(list.ElementAt(0).EntidadeA);
+		}
+		[Fact]
+		public void Given_PA11B11C11_When_AddEntityCListAll_Then_ListAll()
+		{
+			PopulateA11B11C11();
+
+			var list = GetRepoC().NewSearch().All().IncludeEntity(x => x.EntidadeA).Search();
+
+			Assert.Equal(11, list.Count());
+			Assert.NotNull(list.ElementAt(0).EntidadeA);
+		}
+		#endregion Entity
 
 		#region ExecuteSearch
+
 		[Fact]
 		public void Given_PA11B11_When_ListAll_Then_ListAll()
 		{
@@ -123,7 +176,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = repo.NewSearch().All().SmartPagedSearch(0,10);
+			var page = repo.NewSearch().All().SmartPagedSearch(0, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(0, page.PageIndex);
@@ -185,8 +238,8 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			Assert.Equal(0, page.PageIndex);
 			Assert.Equal(10, page.PageSize);
 			Assert.False(page.LastPage);
-			Assert.Equal(3,page.TotalPages);
-			Assert.Equal(22,page.TotalItens);
+			Assert.Equal(3, page.TotalPages);
+			Assert.Equal(22, page.TotalItens);
 			Assert.NotNull(page.Data);
 			Assert.Equal(10, page.Data.Count());
 		}

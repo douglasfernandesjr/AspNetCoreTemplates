@@ -6,7 +6,6 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository.Config.Entities
 	{
 		public EntidadeGenericaB()
 		{
-
 		}
 
 		public EntidadeGenericaB(string nome, double valor)
