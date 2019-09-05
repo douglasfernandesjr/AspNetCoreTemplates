@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 {
-	public class EFRepository<T> : IRepository<T>, IRepositorySearch<T>
+	public class EFRepository<T> : IRepository<T>
 	where T : EntityBase, new()
 	{
 		private readonly DbContext _dbContext;
@@ -110,9 +110,9 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 			return models;
 		}
 
-		public virtual ICustomSearch<T> NewSearch()
+		public virtual ICustomQueryStart<T> Query()
 		{
-			return new EFSearchRepository<T>(this._dbContext);
+			return new EFCustomQuery<T>(this._dbContext);
 		}
 
 		

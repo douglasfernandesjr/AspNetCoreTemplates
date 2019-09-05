@@ -4,11 +4,11 @@ using System.Linq.Expressions;
 
 namespace CleanArchTemplate.Core.Interfaces.DataAccess
 {
-	public interface ICustomSearchStart<T>
+	public interface ICustomQueryStart<T>
 		where T : IEntity
 	{
-		ICustomSearchExecuter<T> All();
+		ICustomQueryExecuter<T> All();
 
-		ICustomSearchExecuter<T> Where(Expression<Func<T, bool>> filterExpression);
+		ICustomQueryExecuter<T> Where(Expression<Func<T, bool>> filterExpression);
 	}
 }

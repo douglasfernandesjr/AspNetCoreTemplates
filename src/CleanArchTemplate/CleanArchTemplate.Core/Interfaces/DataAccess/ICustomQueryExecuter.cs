@@ -10,16 +10,16 @@ namespace CleanArchTemplate.Core.Interfaces.DataAccess
 	///
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public interface ICustomSearchExecuter<T>
+	public interface ICustomQueryExecuter<T>
 		where T : IEntity
 	{
-		ICustomSearchExecuter<T> IncludeEntity(string path);
+		ICustomQueryExecuter<T> IncludeEntity(string path);
 
-		ICustomSearchExecuter<T> IncludeEntity(Expression<Func<T, IEntity>> path);
+		ICustomQueryExecuter<T> IncludeEntity(Expression<Func<T, IEntity>> path);
 
-		ICustomSearchExecuter<T> OrderByAsc<TProp>(Expression<Func<T, TProp>> orderByAsc);
+		ICustomQueryExecuter<T> OrderByAsc<TProp>(Expression<Func<T, TProp>> orderByAsc);
 
-		ICustomSearchExecuter<T> OrderByDesc<TProp>(Expression<Func<T, TProp>> orderByDesc);
+		ICustomQueryExecuter<T> OrderByDesc<TProp>(Expression<Func<T, TProp>> orderByDesc);
 
 		int Count();
 

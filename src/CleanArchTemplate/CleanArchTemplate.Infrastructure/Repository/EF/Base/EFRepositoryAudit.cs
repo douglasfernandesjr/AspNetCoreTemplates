@@ -11,11 +11,11 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 	/// Exemplo de repositório, considerando um entidade com campos padrões para auditoria.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public class EFAuditRepository<T> : EFRepository<T>
+	public class EFRepositoryAudit<T> : EFRepository<T>
 		where T : EntityAuditBase, new()
 	{
 		private IPrincipal _currentPrincipal;
-		public EFAuditRepository(IPrincipal principal, DbContext db) : base(db)
+		public EFRepositoryAudit(IPrincipal principal, DbContext db) : base(db)
 		{
 			_currentPrincipal = principal;
 		}
