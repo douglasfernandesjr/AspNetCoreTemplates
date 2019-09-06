@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using CleanArchTemplate.API.DI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -25,6 +29,11 @@ namespace CleanArchTemplate.API
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			ConfigCurrentUser(services);
+			ConfigDataBase(services);
+			ConfigInfraDI(services);
+			ConfigCoreDI(services);
+
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}
 
@@ -43,6 +52,32 @@ namespace CleanArchTemplate.API
 
 			app.UseHttpsRedirection();
 			app.UseMvc();
+		}
+
+		public virtual void ConfigCurrentUser(IServiceCollection services)
+		{
+			//Disponibilizar o usuário logado através de DI
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+			services.AddTransient<IPrincipal>
+				(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+		}
+
+		public virtual void ConfigDataBase(IServiceCollection services)
+		{
+			services.AddDbContext<DbContext>(options =>
+			{
+				options.UseSqlServer(Configuration.GetConnectionString("Default"));
+			});
+		}
+
+		public virtual void ConfigInfraDI(IServiceCollection services)
+		{
+			InfraDI.Config(services);
+		}
+
+		public virtual void ConfigCoreDI(IServiceCollection services)
+		{
+			CoreDI.Config(services);
 		}
 	}
 }
