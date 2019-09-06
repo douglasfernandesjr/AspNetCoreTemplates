@@ -35,7 +35,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
-			var list = await repo.NewSearch().All().SearchAsync();
+			var list = await repo.Query() .All().SearchAsync();
 
 			Assert.Equal(22, list.Count());
 		}
@@ -49,7 +49,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
-			int count = await repo.NewSearch().All().CountAsync();
+			int count = await repo.Query().All().CountAsync();
 
 			Assert.Equal(22, count);
 		}
@@ -60,7 +60,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
-			int count = await repo.NewSearch().Where(x => x.Valor == MockValues.ValorGenericoB).CountAsync();
+			int count = await repo.Query().Where(x => x.Valor == MockValues.ValorGenericoB).CountAsync();
 
 			Assert.Equal(11, count);
 		}
@@ -73,7 +73,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = await repo.NewSearch().All().SmartPagedSearchAsync(0,10);
+			var page = await repo.Query().All().SmartPagedSearchAsync(0,10);
 
 			Assert.NotNull(page);
 			Assert.Equal(0, page.PageIndex);
@@ -91,7 +91,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = await repo.NewSearch().All().SmartPagedSearchAsync(1, 10);
+			var page = await repo.Query().All().SmartPagedSearchAsync(1, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(1, page.PageIndex);
@@ -109,7 +109,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = await repo.NewSearch().All().SmartPagedSearchAsync(2, 10);
+			var page = await repo.Query().All().SmartPagedSearchAsync(2, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(2, page.PageIndex);
@@ -129,7 +129,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = await repo.NewSearch().All().PagedSearchAsync(0, 10);
+			var page = await repo.Query().All().PagedSearchAsync(0, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(0, page.PageIndex);
@@ -147,7 +147,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = await repo.NewSearch().All().PagedSearchAsync(1, 10);
+			var page = await repo.Query().All().PagedSearchAsync(1, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(1, page.PageIndex);
@@ -165,7 +165,7 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.PopulateA11B11();
 			var repo = GetRepo();
 
-			var page = await repo.NewSearch().All().PagedSearchAsync(2, 10);
+			var page = await repo.Query().All().PagedSearchAsync(2, 10);
 
 			Assert.NotNull(page);
 			Assert.Equal(2, page.PageIndex);

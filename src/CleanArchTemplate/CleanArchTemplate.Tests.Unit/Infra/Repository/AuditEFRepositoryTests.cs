@@ -21,9 +21,9 @@ namespace CleanArchTemplate.Tests.Unit.Infra.Repository
 			_fixture.Clean();
 		}
 
-		private EFAuditRepository<EntidadeGenericaB> GetRepo()
+		private EFRepositoryAudit<EntidadeGenericaB> GetRepo()
 		{
-			return new EFAuditRepository<EntidadeGenericaB>(MockValues.GetMockUser(), _fixture.Context());
+			return new EFRepositoryAudit<EntidadeGenericaB>(MockValues.GetMockUser(), _fixture.Context());
 		}
 
 		private EntidadeGenericaB GetById(EntidadeGenericaB model)

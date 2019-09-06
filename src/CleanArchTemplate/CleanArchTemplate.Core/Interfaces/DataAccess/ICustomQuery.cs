@@ -2,7 +2,7 @@
 
 namespace CleanArchTemplate.Core.Interfaces.DataAccess
 {
-	public interface ICustomSearch<T> : ICustomSearchStart<T>, ICustomSearchExecuter<T>
+	public interface ICustomQuery<T> : ICustomQueryStart<T>, ICustomQueryExecuter<T>
 		where T : IEntity
 	{
 	}

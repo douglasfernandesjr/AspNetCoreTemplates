@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 {
-	public class EFSearchRepository<T> : ICustomSearch<T>
+	public class EFCustomQuery<T> : ICustomQuery<T>
 		where T : EntityBase, new()
 	{
 		private readonly DbContext _dbContext;
@@ -23,23 +23,23 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 		private List<LambdaExpression> _orderByAscExpression;
 		private List<LambdaExpression> _orderByDescExpression;
 
-		public EFSearchRepository(DbContext db)
+		public EFCustomQuery(DbContext db)
 		{
 			_dbContext = db;
 		}
 
-		public ICustomSearchExecuter<T> All()
+		public ICustomQueryExecuter<T> All()
 		{
 			return this;
 		}
 
-		public ICustomSearchExecuter<T> Where(Expression<Func<T, bool>> filterExpression)
+		public ICustomQueryExecuter<T> Where(Expression<Func<T, bool>> filterExpression)
 		{
 			_whereExpression = filterExpression;
 			return this;
 		}
 
-		public ICustomSearchExecuter<T> IncludeEntity(string path)
+		public ICustomQueryExecuter<T> IncludeEntity(string path)
 		{
 			if (_includesString == null)
 				_includesString = new List<string>();
@@ -49,7 +49,7 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 			return this;
 		}
 
-		public ICustomSearchExecuter<T> IncludeEntity(Expression<Func<T, IEntity>> path)
+		public ICustomQueryExecuter<T> IncludeEntity(Expression<Func<T, IEntity>> path)
 		{
 			if (__includesExpression == null)
 				__includesExpression = new List<Expression<Func<T, IEntity>>>();
@@ -59,7 +59,7 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 			return this;
 		}
 
-		public ICustomSearchExecuter<T> OrderByAsc<TProp>(Expression<Func<T, TProp>> orderByAsc)
+		public ICustomQueryExecuter<T> OrderByAsc<TProp>(Expression<Func<T, TProp>> orderByAsc)
 		{
 			if (_orderByAscExpression == null)
 				_orderByAscExpression = new List<LambdaExpression>();
@@ -68,7 +68,7 @@ namespace CleanArchTemplate.Infrastructure.Repository.EF.Base
 			return this;
 		}
 
-		public ICustomSearchExecuter<T> OrderByDesc<TProp>(Expression<Func<T, TProp>> orderByDesc)
+		public ICustomQueryExecuter<T> OrderByDesc<TProp>(Expression<Func<T, TProp>> orderByDesc)
 		{
 			if (_orderByDescExpression == null)
 				_orderByDescExpression = new List<LambdaExpression>();
