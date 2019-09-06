@@ -11,12 +11,13 @@ namespace CleanArchTemplate.API.DI
 	{
 		public static void Config(IServiceCollection servicesContainer)
 		{
-			ConfigBusinessService(servicesContainer);
+			ConfigBusinessService(servicesContainer, typeof(IBusinessService));
 		}
 
-		private static void ConfigBusinessService(IServiceCollection servicesContainer)
+		private static void ConfigBusinessService(IServiceCollection servicesContainer, Type AssemblyRef)
 		{
-			IEnumerable<Type> allTypes = typeof(IBusinessService).Assembly.GetExportedTypes();
+
+			IEnumerable<Type> allTypes = AssemblyRef.Assembly.GetExportedTypes();
 
 			var services = allTypes.Where(type =>
 							type.GetInterfaces().Contains(typeof(IBusinessService))

@@ -1,4 +1,5 @@
-﻿using CleanArchTemplate.Core.Interfaces.Data;
+﻿using CleanArchTemplate.Core.Entities.Base;
+using CleanArchTemplate.Core.Interfaces.Data;
 using CleanArchTemplate.Core.Interfaces.DataAccess;
 using CleanArchTemplate.Infrastructure.Repository.EF.Base;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,12 +13,12 @@ namespace CleanArchTemplate.API.DI
 	{
 		public static void Config(IServiceCollection servicesContainer)
 		{
-			ConfigEFRepository(servicesContainer);
+			ConfigEFRepository(servicesContainer, typeof(EFRepository<>), typeof(IEntity));
 		}
 
-		private static void ConfigEFRepository(IServiceCollection servicesContainer)
+		private static void ConfigEFRepository(IServiceCollection servicesContainer, Type InfraTypeRef, Type DomainTypeRef)
 		{
-			var infraAssembly = typeof(EFRepository<>).Assembly;
+			var infraAssembly = InfraTypeRef.Assembly;
 			var respositoryBase = typeof(IRepository<>);
 
 			//Busca todos os repositórios implementados e as interfaces customizadas.
@@ -26,21 +27,21 @@ namespace CleanArchTemplate.API.DI
 				from type in infraAssembly.GetExportedTypes()
 				where type.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == respositoryBase)
 				&& type.IsClass && !type.IsAbstract && !type.IsGenericType
-				select new { Service = type.GetInterfaces(), Implementation = type };
+				//select new Tuple<Type[], Type>( type.GetInterfaces(),  type );
+				select (Services: type.GetInterfaces(), Implementation: type);
 
-			//Efetua o registro das implementações para resolver por
-			//as requisições de (IRepository<T> e IRepositoryExemplo)
+			//Efetua o registro das implementações de repositorios
+			// DI de (IRepository<T> e IRepositoryExemplo)
 			foreach (var reg in customRepositories)
 			{
-				foreach (var service in reg.Service)
+				foreach (var service in reg.Services)
 				{
 					servicesContainer.AddScoped(service, reg.Implementation);
 				}
 			}
-
-
+			
 			//Busca o assembly do modelo
-			var dbModelAssembly = typeof(IEntity).Assembly;
+			var dbModelAssembly = DomainTypeRef.Assembly;
 			//Busca lista de classe que são entidade dos banco
 
 			var dbModelListAll = dbModelAssembly.GetExportedTypes()
@@ -52,9 +53,9 @@ namespace CleanArchTemplate.API.DI
 			//Separa em modelo IEntityAudit e IEntity
 			foreach (Type type in dbModelListAll)
 			{
-				if (type.GetInterfaces().Contains(typeof(IEntityAudit)))
+				if (type.BaseType == typeof(EntityAuditBase))
 					dbAuditModelList.Add(type);
-				else
+				else if (type.BaseType == typeof(EntityBase))
 					dbModelList.Add(type);
 			}
 
@@ -69,7 +70,7 @@ namespace CleanArchTemplate.API.DI
 			var modelAuditRegistrations = from type in dbAuditModelList
 											  // Remove as implementações existentes de Repositórios especificos
 										  where !customRepositories.ToList()
-										  .Exists(i => i.Service.Any(s => s.GenericTypeArguments.FirstOrDefault() == type))
+										  .Exists(i => i.Services.Any(s => s.GenericTypeArguments.FirstOrDefault() == type))
 										  select new
 										  {
 											  Service = respositoryBase.MakeGenericType(type),
@@ -80,7 +81,7 @@ namespace CleanArchTemplate.API.DI
 			var modelRegistrations = from type in dbModelList
 										 // Remove as implementações existentes de Repositórios especificos
 									 where !customRepositories.ToList()
-										  .Exists(i => i.Service.Any(s => s.GenericTypeArguments.FirstOrDefault() == type))
+										  .Exists(i => i.Services.Any(s => s.GenericTypeArguments.FirstOrDefault() == type))
 									 select new
 									 {
 										 Service = respositoryBase.MakeGenericType(type),

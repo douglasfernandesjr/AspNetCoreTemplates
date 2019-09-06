@@ -1,5 +1,4 @@
-﻿using CleanArchTemplate.Core.Interfaces;
-using CleanArchTemplate.Core.Interfaces.Data;
+﻿using CleanArchTemplate.Core.Interfaces.Data;
 using System;
 
 namespace CleanArchTemplate.Core.Entities.Base
