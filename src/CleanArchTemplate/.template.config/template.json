@@ -1,0 +1,25 @@
+﻿{
+	"$schema": "http://json.schemastore.org/template",
+	"author": "douglasfernandesjr",
+	"classifications": [
+        "Web Api", 
+		"CleanArch"
+    ],
+	"name": "DFjr CleanArch API",
+	"identity": "DFJr.AspNetCore.CleanArchAPI",
+	"groupIdentity": "DFJr.AspNetCore.Templates",
+	"description": "Template padrão para projetos AspNet Core",
+	"shortName": "dfjr-cleanapi",
+	"tags": {
+		"language": "C#",
+		"type": "project"
+	},
+	"sourceName": "CleanArchTemplate",
+	"preferNameDirectory": true,
+	"guids": [ "0ED8F417-888F-4009-90CD-19B8407AE4A1","E8C5D1C0-4CE9-4F7E-9F68-2BF7D374915E","DF6EF542-0475-443F-98BF-1FED6E96BD53","7D4BEF2D-BF00-465F-BBB5-6A943C76414E","0655FF01-FCBF-4D28-9887-092C16D17B21","DD50309A-94E9-4DCB-BA84-6A0ABBB3991A"],
+    "sources": [
+		{
+			"exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*",".vs/**/*", "**/*.filelist", "**/*.user", "**/*.lock.json" ]
+		}
+	  ]
+}

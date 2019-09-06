@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>DFJr.AspNetCore.Templates</id>
+    <version>1.0.0</version>
+    <authors>douglasfernandesjr</authors>
+    <owners>douglasfernandesjr</owners>
+    <description>Template padrão para projetos AspNet Core.</description>
+    <language>pt-BR</language>
+    <projectUrl>https://github.com/douglasfernandesjr/AspNetCoreTemplates</projectUrl>
+    <licenseUrl>https://www.microsoft.com/web/webpi/eula/net_library_eula_enu.htm</licenseUrl>
+    <packageTypes>
+      <packageType name="Template" />
+    </packageTypes>
+  </metadata>
+  <files>
+    <file src="**" exclude="README.MD;**\Logs\*;**\bin\**\*;**\obj\**\*;**\*.user;**\*.log;**\.vscode\**\*;;**\.vs\**\*;" />
+  </files>
+</package>
